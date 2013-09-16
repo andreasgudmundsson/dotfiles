@@ -123,6 +123,9 @@
 (defun find-deep-cabal (dir lvl)
   (find-deep dir lvl 'find-cabal))
 
+(defun find-first-cabal (dir lvl)
+  (car (find-deep-cabal dir lvl)))
+
 (defun cd.. (dir)
   (if (equal "/" dir)
       dir
@@ -135,12 +138,15 @@
   (interactive "D")
   (find-deep-cabal dir 2))
 
-(defun cabaldev-install ()
-  (interactive)
-  ;; Can be a long list of cables, lazy me picks the first
-  (let ((cabal (car (find-deep-cabal default-directory 3))))
-    (if cabal 
-        (cabal-build cabal))))
+(defmacro cabaldev-cmd (name fun)
+  `(defun ,name ()
+     (interactive)
+     (let ((cabal (find-first-cabal default-directory 3)))
+       (if cabal 
+           (funcall ,fun cabal)))))
+
+(cabaldev-cmd cabaldev-install    'cabal-build)
+(cabaldev-cmd cabaldev-edit-cabal 'find-file)
 
 (defun cabal-build (cabal)
   (let ((cmd (format "cd %s && cabal-dev install" 
