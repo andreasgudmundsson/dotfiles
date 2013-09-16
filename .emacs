@@ -72,22 +72,6 @@
 ;(add-to-list 'tramp-default-proxies-alist
 ;	     '((regexp-quote (system-name)) nil nil))
 
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(exec-path (quote ("/usr/bin" "/usr/local/bin" "/usr/local/sbin" "/bin" "/usr/sbin" "/sbin" "/Applications/Emacs.app/Contents/MacOS/bin" "/opt/local/bin" "/opt/local/sbin")))
- '(haskell-mode-hook (quote (turn-on-haskell-indententation turn-turn-on-font-lock)))
- '(safe-local-variable-values (quote ((c-indentation-style . bsd)))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
 ;;; C
 (setq-default c-offsets-alist '((case-label . +))
 	      c-default-style '((java-mode . "java") 
@@ -163,4 +147,8 @@
                      (file-name-directory cabal))))
     (compile cmd)))
           
+;; Fix environment when using Emacs.app
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize))
+
 
