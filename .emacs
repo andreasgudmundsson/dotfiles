@@ -65,12 +65,16 @@
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 
 ;;; TRAMP
+(require 'tramp)
 (setq tramp-default-method "ssh")
 ;(add-to-list 'tramp-remote-path "/usr/local/bin")
 ;(add-to-list 'tramp-default-proxies-alist
 ;	     '(nil "\\`root\\'" "/ssh:%h:"))
 ;(add-to-list 'tramp-default-proxies-alist
 ;	     '((regexp-quote (system-name)) nil nil))
+
+(add-to-list 'tramp-default-proxies-alist
+             '("nobody@nasarde.org" nil "/ssh:andreasg@nasarde.org"))
 
 ;;; C
 (setq-default c-offsets-alist '((case-label . +))
@@ -145,11 +149,11 @@
        (if cabal 
            (funcall ,fun cabal)))))
 
-(cabaldev-cmd cabaldev-install    'cabal-build)
+(cabaldev-cmd cabaldev-build      'cabal-build)
 (cabaldev-cmd cabaldev-edit-cabal 'find-file)
 
 (defun cabal-build (cabal)
-  (let ((cmd (format "cd %s && cabal-dev install" 
+  (let ((cmd (format "cd %s && cabal-dev build" 
                      (file-name-directory cabal))))
     (compile cmd)))
           
